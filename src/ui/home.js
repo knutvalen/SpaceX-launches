@@ -16,16 +16,26 @@ function Home() {
     const { count } = useCountdown(10);// hard-code 10 seconds countdown for now
 
     useEffect(() => {
-        const getLaunches = async function() {
+        const getNextLaunches = async function() {
             try {
-                let result = await axios.get("");
+                let result = await axios.get("https://api.spacexdata.com/v4/launches/upcoming");
                 console.log(result)
             } catch (e) {
                 console.log(e)
             }
         };
 
-        getLaunches();
+        const getNextLaunch = async function() {
+            try {
+                let result = await axios.get("https://api.spacexdata.com/v4/launches/next");
+                console.log(result)
+            } catch (e) {
+                console.log(e)
+            }
+        };
+
+        getNextLaunches();
+        getNextLaunch();
     }, []);
 
     return (
