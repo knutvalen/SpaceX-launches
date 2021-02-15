@@ -1,4 +1,6 @@
 import { makeStyles } from "@material-ui/core";
+import axios from "axios";
+import { useEffect } from "react";
 import useCountdown from "../hooks/useCountdown";
 
 const useStyles = makeStyles((theme) => ({
@@ -12,6 +14,19 @@ const useStyles = makeStyles((theme) => ({
 function Home() {
     const classes = useStyles();
     const { count } = useCountdown(10);// hard-code 10 seconds countdown for now
+
+    useEffect(() => {
+        const getLaunches = async function() {
+            try {
+                let result = await axios.get("");
+                console.log(result)
+            } catch (e) {
+                console.log(e)
+            }
+        };
+
+        getLaunches();
+    }, []);
 
     return (
         <main className={classes.content}>
