@@ -1,5 +1,6 @@
 import { makeStyles, createMuiTheme, MuiThemeProvider } from "@material-ui/core";
 import { blue, green } from "@material-ui/core/colors";
+import Home from "./ui/home";
 
 const useStyles = makeStyles((theme) => ({
     root: { display: "flex" },
@@ -15,7 +16,7 @@ const theme = createMuiTheme({
 const layoutToShow = (layoutName) => {
     switch (layoutName) {
         case "home":
-            return <div>Hello world</div>;
+            return <Home />;
 
         default:
             return <div>Not found</div>
@@ -26,9 +27,9 @@ function App({ layoutName }) {
     const classes = useStyles();
     return (
         <MuiThemeProvider theme={theme}>
-            <div className={classes.root}>
+            <main className={classes.root}>
                 {layoutToShow(layoutName)}
-            </div>
+            </main>
         </MuiThemeProvider>
     );
 };
