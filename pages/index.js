@@ -2,7 +2,7 @@ import App from "../src/app";
 
 function Index() {
     return (
-        <App />
+        <App layoutName="home" />
     );
 };
 

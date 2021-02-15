@@ -12,12 +12,22 @@ const theme = createMuiTheme({
     },
 });
 
-function App() {
+const layoutToShow = (layoutName) => {
+    switch (layoutName) {
+        case "home":
+            return <div>Hello world</div>;
+
+        default:
+            return <div>Not found</div>
+    }
+};
+
+function App({ layoutName }) {
     const classes = useStyles();
     return (
         <MuiThemeProvider theme={theme}>
             <div className={classes.root}>
-                hello world
+                {layoutToShow(layoutName)}
             </div>
         </MuiThemeProvider>
     );
