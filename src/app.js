@@ -1,5 +1,6 @@
-import { makeStyles, createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import { makeStyles, createMuiTheme, MuiThemeProvider, CssBaseline } from "@material-ui/core";
 import { blue, green } from "@material-ui/core/colors";
+import Head from "./ui/head";
 import Home from "./ui/home";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,11 +26,14 @@ const layoutToShow = (layoutName) => {
 
 function App({ layoutName }) {
     const classes = useStyles();
+    
     return (
         <MuiThemeProvider theme={theme}>
-            <main className={classes.root}>
+            <div className={classes.root}>
+                <CssBaseline />
+                <Head />
                 {layoutToShow(layoutName)}
-            </main>
+            </div>
         </MuiThemeProvider>
     );
 };
