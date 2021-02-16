@@ -1,9 +1,7 @@
 import App from "../src/app";
 
-function Index() {
+export default function Index() {
     return (
         <App layoutName="home" />
     );
 };
-
-export default Index;

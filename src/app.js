@@ -24,7 +24,7 @@ const layoutToShow = (layoutName) => {
     }
 };
 
-function App({ layoutName }) {
+export default function App({ layoutName }) {
     const classes = useStyles();
     
     return (
@@ -37,5 +37,3 @@ function App({ layoutName }) {
         </MuiThemeProvider>
     );
 };
-
-export default App;

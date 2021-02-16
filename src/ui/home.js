@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function Home() {
+export default function Home() {
     const classes = useStyles();
     const [delay, setDelay] = useState();
     const [count, setCount] = useState();
@@ -86,5 +86,3 @@ function Home() {
         </main>
     );
 };
-
-export default Home;

@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Typography } from "@material-ui/core";
 
-function Head() {
+export default function Head() {
     return (
         <AppBar>
             <Toolbar>
@@ -11,5 +11,3 @@ function Head() {
         </AppBar>
     );
 };
-
-export default Head;
