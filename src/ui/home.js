@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
-import useCountdown from "../hooks/useCountdown";
-import useLaunchInteractor from "../hooks/useLaunchInteractor";
+import { useEffect, useState, useRef } from "react";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
@@ -12,20 +12,41 @@ const useStyles = makeStyles((theme) => ({
 
 function Home() {
     const classes = useStyles();
-    const { count } = useCountdown(10);// hard-code 10 seconds countdown for now
-    const { nextLaunch, upcomingLaunches, hasErrored, error } = useLaunchInteractor();
+    const [delay, setDelay] = useState();
+    const [count, setCount] = useState(0);
+    const callbackRef = useRef();
+
+    useEffect(() => {
+        new Promise(resolve => {
+            let result = axios.get("https://api.spacexdata.com/v4/launches/next");
+            resolve(result);
+        }).then(nextLaunch => {
+            console.log(nextLaunch.data.date_unix);
+            setDelay(1000);
+            setCount(10);//TODO: use nextLaunch.data.date_unix to calculate the diff in seconds
+        });
+    }, []);
+
+    useEffect(() => {
+        callbackRef.current = () => setCount(count - 1);
+    }, [count]);
+
+    useEffect(() => {
+        function tick() {
+            callbackRef.current();
+        };
+
+        if (delay !== null) {
+            let id = setInterval(tick, delay);
+            return () => clearInterval(id);
+        }
+    }, [delay]);
 
     return (
         <main className={classes.content}>
             <div className={classes.toolbar} />
-            <div>
-                {count > 0
-                    ? `Countdown timer: ${count}`
-                    : `Liftoff!`
-                }
-            </div>
-            {nextLaunch && (
-                <div>Next launch is: {nextLaunch.date_utc}</div>
+            {count && count > 0 && (
+                <div>T minus {count}</div>
             )}
         </main>
     );
