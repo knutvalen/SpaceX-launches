@@ -37,16 +37,24 @@ export default function Home() {
         });
     };
 
+    function tick() {
+        callbackRef.current();
+    };
+
+    function formatCountdown(count) {
+        const days = Math.floor(count / (60 * 60 * 24));
+        const hours = Math.floor((count % (60 * 60 * 24)) / (60 * 60));
+        const minutes = Math.floor((count % (60 * 60)) / 60);
+        const seconds = Math.floor(count % 60);
+        return `${days}d ${hours}t ${minutes}m ${seconds}s`;
+    };
+
     useEffect(() => {
         setPageName("Dashboard");
         refresh();
     }, []);
 
     useEffect(() => {
-        function tick() {
-            callbackRef.current();
-        };
-
         if (delay) {
             countdownTimerID = setInterval(tick, delay);
             return () => clearInterval(countdownTimerID);
@@ -55,14 +63,6 @@ export default function Home() {
 
     useEffect(() => {
         callbackRef.current = () => setCount(count - 1);
-
-        function formatCountdown(count) {
-            const days = Math.floor(count / (60 * 60 * 24));
-            const hours = Math.floor((count % (60 * 60 * 24)) / (60 * 60));
-            const minutes = Math.floor((count % (60 * 60)) / 60);
-            const seconds = Math.floor(count % 60);
-            return `${days}d ${hours}t ${minutes}m ${seconds}s`;
-        };
 
         if (count > 0) {
             const countdown = formatCountdown(count);
