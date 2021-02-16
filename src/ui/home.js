@@ -4,6 +4,7 @@ import axios from "axios";
 import { GlobalContext } from "../global-state";
 import LaunchPreview from "./launch-preview";
 import HomeReducer from "../reducers/home-reducer";
+import NextLaunchPreview from "./next-launch-preview";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
@@ -28,7 +29,7 @@ export default function Home() {
     let countdownTimerID;
 
     const [
-        { delay, count, countdown, nextLaunch, upcomingLaunches, hasErrored, error, },
+        { delay, count, countdown, nextLaunch, upcomingLaunches, hasErrored, error },
         dispatch
     ] = useReducer(HomeReducer, {
         delay: null,
@@ -113,8 +114,9 @@ export default function Home() {
             ) : (
                     <div>
                         {countdown && (
-                            <div>{countdown}</div>
+                            <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
                         )}
+                        <br/>
                         {upcomingLaunches && upcomingLaunches.map((launch) => (
                             <LaunchPreview key={launch.id} launch={launch} />
                         ))}
