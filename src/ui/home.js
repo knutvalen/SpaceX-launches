@@ -3,6 +3,7 @@ import { useEffect, useRef, useContext, useReducer } from "react";
 import axios from "axios";
 import { GlobalContext } from "../global-state";
 import LaunchPreview from "./launch-preview";
+import HomeReducer from "../reducers/home-reducer";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
@@ -12,23 +13,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const reducer = (state, action) => {
-    switch (action.type) {
-        case "setDelay":
-            return { ...state, delay: action.data };
-
-        case "setCount":
-            return { ...state, count: action.data };
-
-        case "setCountdown":
-            return { ...state, countdown: action.data };
-
-        case "setUpcomingLaunches":
-            return { ...state, upcomingLaunches: action.data };
-
-        default:
-            return state;
-    }
+const formatCountdown = (count) => {
+    const days = Math.floor(count / (60 * 60 * 24));
+    const hours = Math.floor((count % (60 * 60 * 24)) / (60 * 60));
+    const minutes = Math.floor((count % (60 * 60)) / 60);
+    const seconds = Math.floor(count % 60);
+    return `${days}d ${hours}t ${minutes}m ${seconds}s`;
 };
 
 export default function Home() {
@@ -40,7 +30,7 @@ export default function Home() {
     const [
         { delay, count, countdown, upcomingLaunches },
         dispatch
-    ] = useReducer(reducer, {
+    ] = useReducer(HomeReducer, {
         delay: null,
         count: null,
         countdown: null,
@@ -65,23 +55,11 @@ export default function Home() {
         });//TODO: catch exceptions
     };
 
-    function tick() {
-        callbackRef.current();
-    };
-
-    function formatCountdown(count) {
-        const days = Math.floor(count / (60 * 60 * 24));
-        const hours = Math.floor((count % (60 * 60 * 24)) / (60 * 60));
-        const minutes = Math.floor((count % (60 * 60)) / 60);
-        const seconds = Math.floor(count % 60);
-        return `${days}d ${hours}t ${minutes}m ${seconds}s`;
-    };
-
     useEffect(() => {
         setPageName("Dashboard");
         refreshNextLaunch();
 
-        const getNextLaunches = async function () {
+        const refreshUpcomingLaunches = async function () {
             try {
                 const result = await axios.get("https://api.spacexdata.com/v4/launches/upcoming");
                 console.log(result.data);
@@ -91,12 +69,12 @@ export default function Home() {
             }
         };
 
-        getNextLaunches();
+        refreshUpcomingLaunches();
     }, []);
 
     useEffect(() => {
         if (delay) {
-            countdownTimerID = setInterval(tick, delay);
+            countdownTimerID = setInterval(() => callbackRef.current(), delay);
             return () => clearInterval(countdownTimerID);
         }
     }, [delay]);
@@ -105,9 +83,7 @@ export default function Home() {
         callbackRef.current = () => dispatch({ type: "setCount", data: (count - 1) });
 
         if (count > 0) {
-            const countdown = formatCountdown(count);
-            console.log(countdown);
-            dispatch({ type: "setCountdown", data: countdown });
+            dispatch({ type: "setCountdown", data: formatCountdown(count) });
         }
 
         if (count === 0) {
