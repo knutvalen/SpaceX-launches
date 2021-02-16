@@ -28,12 +28,13 @@ export default function Home() {
     let countdownTimerID;
 
     const [
-        { delay, count, countdown, upcomingLaunches, hasErrored, error },
+        { delay, count, countdown, nextLaunch, upcomingLaunches, hasErrored, error, },
         dispatch
     ] = useReducer(HomeReducer, {
         delay: null,
         count: null,
         countdown: null,
+        nextLaunch: null,
         upcomingLaunches: [],
         hasErrored: false,
         error: null,
@@ -45,15 +46,7 @@ export default function Home() {
             resolve(result);
         }).then(nextLaunch => {
             console.log(nextLaunch.data);
-            if (nextLaunch.data.date_utc) {
-                dispatch({ type: "setDelay", data: 1000 });
-                const now = new Date().getTime();
-                const nextLaunchTime = new Date(nextLaunch.data.date_utc).getTime();
-                const diffSeconds = Math.floor((nextLaunchTime - now) / 1000);
-                dispatch({ type: "setCount", data: diffSeconds });
-            } else {
-                dispatch({ type: "setCount", data: null });
-            }
+            dispatch({ type: "setNextLaunch", data: nextLaunch.data });
         }).catch(error => {
             dispatch({ type: "onError", error: error });
         });
@@ -65,9 +58,9 @@ export default function Home() {
 
         const refreshUpcomingLaunches = async function () {
             try {
-                const result = await axios.get("https://api.spacexdata.com/v4/launches/upcoming");
-                console.log(result.data);
-                dispatch({ type: "setUpcomingLaunches", data: result.data });
+                const upcomingLaunches = await axios.get("https://api.spacexdata.com/v4/launches/upcoming");
+                console.log(upcomingLaunches.data);
+                dispatch({ type: "setUpcomingLaunches", data: upcomingLaunches.data });
             } catch (error) {
                 dispatch({ type: "onError", error: error });
             }
@@ -99,6 +92,18 @@ export default function Home() {
             refreshNextLaunch();
         }
     }, [count]);
+
+    useEffect(() => {
+        if (nextLaunch) {
+            dispatch({ type: "setDelay", data: 1000 });
+            const now = new Date().getTime();
+            const nextLaunchTime = new Date(nextLaunch.date_utc).getTime();
+            const diffSeconds = Math.floor((nextLaunchTime - now) / 1000);
+            dispatch({ type: "setCount", data: diffSeconds });
+        } else {
+            dispatch({ type: "setCount", data: null });
+        }
+    }, [nextLaunch]);
 
     return (
         <main className={classes.content}>

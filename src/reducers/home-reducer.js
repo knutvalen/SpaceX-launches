@@ -18,6 +18,12 @@ export default function HomeReducer(state, action) {
                 countdown: action.data,
             };
 
+        case "setNextLaunch":
+            return {
+                ...state,
+                nextLaunch: action.data,
+            };
+
         case "setUpcomingLaunches":
             return {
                 ...state,
