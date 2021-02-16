@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
+import { GlobalContext } from "../global-state";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
@@ -11,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Home() {
+    const { setPageName } = useContext(GlobalContext);
     const classes = useStyles();
     const [delay, setDelay] = useState();
     const [count, setCount] = useState();
@@ -33,9 +35,10 @@ export default function Home() {
                 setCount(null);
             }
         });
-    }
+    };
 
     useEffect(() => {
+        setPageName("Dashboard");
         refresh();
     }, []);
 
