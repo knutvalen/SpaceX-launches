@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import { useEffect, useState, useRef, useContext } from "react";
+import { useEffect, useRef, useContext, useReducer } from "react";
 import axios from "axios";
 import { GlobalContext } from "../global-state";
 import LaunchPreview from "./launch-preview";
@@ -12,29 +12,55 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const reducer = (state, action) => {
+    switch (action.type) {
+        case "setDelay":
+            return { ...state, delay: action.data };
+
+        case "setCount":
+            return { ...state, count: action.data };
+
+        case "setCountdown":
+            return { ...state, countdown: action.data };
+
+        case "setUpcomingLaunches":
+            return { ...state, upcomingLaunches: action.data };
+
+        default:
+            return state;
+    }
+};
+
 export default function Home() {
     const { setPageName } = useContext(GlobalContext);
     const classes = useStyles();
-    const [delay, setDelay] = useState();
-    const [count, setCount] = useState();
-    const [countdown, setCountdown] = useState();
-    const [upcomingLaunches, setUpcomingLaunches] = useState();
     const callbackRef = useRef();
     let countdownTimerID;
+
+    const [
+        { delay, count, countdown, upcomingLaunches },
+        dispatch
+    ] = useReducer(reducer, {
+        delay: null,
+        count: null,
+        countdown: null,
+        upcomingLaunches: [],
+    });
 
     function refreshNextLaunch() {
         new Promise(resolve => {
             const result = axios.get("https://api.spacexdata.com/v4/launches/next");
             resolve(result);
         }).then(nextLaunch => {
+            console.log(nextLaunch.data);
             if (nextLaunch.data.date_utc) {
-                setDelay(1000);
+                dispatch({ type: "setDelay", data: 1000 });
                 const now = new Date().getTime();
                 const nextLaunchTime = new Date(nextLaunch.data.date_utc).getTime();
                 const diffSeconds = Math.floor((nextLaunchTime - now) / 1000);
-                setCount(diffSeconds);
+                dispatch({ type: "setCount", data: diffSeconds });
             } else {
-                setCount(null);
+                dispatch({ type: "setCount", data: null });
             }
         });//TODO: catch exceptions
     };
@@ -59,7 +85,7 @@ export default function Home() {
             try {
                 const result = await axios.get("https://api.spacexdata.com/v4/launches/upcoming");
                 console.log(result.data);
-                setUpcomingLaunches(result.data);
+                dispatch({ type: "setUpcomingLaunches", data: result.data });
             } catch (e) {
                 console.log(e);
             }
@@ -76,16 +102,16 @@ export default function Home() {
     }, [delay]);
 
     useEffect(() => {
-        callbackRef.current = () => setCount(count - 1);
+        callbackRef.current = () => dispatch({ type: "setCount", data: (count - 1) });
 
         if (count > 0) {
             const countdown = formatCountdown(count);
             console.log(countdown);
-            setCountdown(countdown);
+            dispatch({ type: "setCountdown", data: countdown });
         }
 
         if (count === 0) {
-            setCountdown("Liftoff!");
+            dispatch({ type: "setCountdown", data: "Liftoff!" });
         }
 
         if (count < 0) {
