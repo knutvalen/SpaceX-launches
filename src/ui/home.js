@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/core";
 import { useEffect, useState, useRef, useContext } from "react";
 import axios from "axios";
 import { GlobalContext } from "../global-state";
+import LaunchPreview from "./launch-preview";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
@@ -17,10 +18,11 @@ export default function Home() {
     const [delay, setDelay] = useState();
     const [count, setCount] = useState();
     const [countdown, setCountdown] = useState();
+    const [upcomingLaunches, setUpcomingLaunches] = useState();
     const callbackRef = useRef();
     let countdownTimerID;
 
-    function refresh() {
+    function refreshNextLaunch() {
         new Promise(resolve => {
             const result = axios.get("https://api.spacexdata.com/v4/launches/next");
             resolve(result);
@@ -34,7 +36,7 @@ export default function Home() {
             } else {
                 setCount(null);
             }
-        });
+        });//TODO: catch exceptions
     };
 
     function tick() {
@@ -51,7 +53,19 @@ export default function Home() {
 
     useEffect(() => {
         setPageName("Dashboard");
-        refresh();
+        refreshNextLaunch();
+
+        const getNextLaunches = async function () {
+            try {
+                const result = await axios.get("https://api.spacexdata.com/v4/launches/upcoming");
+                console.log(result.data);
+                setUpcomingLaunches(result.data);
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
+        getNextLaunches();
     }, []);
 
     useEffect(() => {
@@ -76,7 +90,7 @@ export default function Home() {
 
         if (count < 0) {
             clearInterval(countdownTimerID);
-            refresh();
+            refreshNextLaunch();
         }
     }, [count]);
 
@@ -86,6 +100,9 @@ export default function Home() {
             {countdown && (
                 <div>{countdown}</div>
             )}
+            {upcomingLaunches && upcomingLaunches.map((launch) => (
+                <LaunchPreview key={launch.id} launch={launch} />
+            ))}
         </main>
     );
 };
