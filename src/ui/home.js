@@ -28,13 +28,15 @@ export default function Home() {
     let countdownTimerID;
 
     const [
-        { delay, count, countdown, upcomingLaunches },
+        { delay, count, countdown, upcomingLaunches, hasErrored, error },
         dispatch
     ] = useReducer(HomeReducer, {
         delay: null,
         count: null,
         countdown: null,
         upcomingLaunches: [],
+        hasErrored: false,
+        error: null,
     });
 
     function refreshNextLaunch() {
@@ -52,7 +54,9 @@ export default function Home() {
             } else {
                 dispatch({ type: "setCount", data: null });
             }
-        });//TODO: catch exceptions
+        }).catch(error => {
+            dispatch({ type: "onError", error: error });
+        });
     };
 
     useEffect(() => {
@@ -64,8 +68,8 @@ export default function Home() {
                 const result = await axios.get("https://api.spacexdata.com/v4/launches/upcoming");
                 console.log(result.data);
                 dispatch({ type: "setUpcomingLaunches", data: result.data });
-            } catch (e) {
-                console.log(e);
+            } catch (error) {
+                dispatch({ type: "onError", error: error });
             }
         };
 
@@ -99,12 +103,19 @@ export default function Home() {
     return (
         <main className={classes.content}>
             <div className={classes.toolbar} />
-            {countdown && (
-                <div>{countdown}</div>
-            )}
-            {upcomingLaunches && upcomingLaunches.map((launch) => (
-                <LaunchPreview key={launch.id} launch={launch} />
-            ))}
+            {hasErrored ? (
+                <div>An error occurred</div>
+            ) : (
+                    <div>
+                        {countdown && (
+                            <div>{countdown}</div>
+                        )}
+                        {upcomingLaunches && upcomingLaunches.map((launch) => (
+                            <LaunchPreview key={launch.id} launch={launch} />
+                        ))}
+                    </div>
+                )
+            }
         </main>
     );
 };
