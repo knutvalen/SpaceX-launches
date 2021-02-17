@@ -21,20 +21,28 @@ const layoutToShow = (layoutName) => {
             return <Home />;
 
         default:
-            return <div>Not found</div>
+            return null;
     }
 };
 
 export default function App({ layoutName }) {
     const classes = useStyles();
+    const layout = layoutToShow(layoutName);
 
     return (
         <GlobalProvider>
             <MuiThemeProvider theme={theme}>
                 <div className={classes.root}>
                     <CssBaseline />
-                    <Head />
-                    {layoutToShow(layoutName)}
+                    {layout ? (
+                        <div>
+                            <Head />
+                            {layout}
+                        </div>
+                    ) : (
+                            <div>Not found</div>
+                        )
+                    }
                 </div>
             </MuiThemeProvider>
         </GlobalProvider>
