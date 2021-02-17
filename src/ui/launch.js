@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core";
+import axios from "axios";
 import { withRouter } from "next/router";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../global-state";
 
 const useStyles = makeStyles((theme) => ({
@@ -14,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
 function Launch({ router }) {
     const classes = useStyles();
     const { setPageName } = useContext(GlobalContext);
+    const [launch, setLaunch] = useState();
 
     useEffect(() => {
         setPageName("Launch details");
@@ -21,11 +23,29 @@ function Launch({ router }) {
         console.log("---> router.query");
         console.log(router.query);
         console.log("<--- router.query");
+
+        const refresh = async function () {
+            try {
+                const launch = await axios.get(`https://api.spacexdata.com/v4/launches/${router.query.id}`);
+                console.log(launch.data);
+                setLaunch(launch.data);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        refresh();
     }, []);
 
     return (
         <main className={classes.content}>
             <div className={classes.toolbar} />
+            {launch ? (
+                <div>{launch.name}</div>
+            ) : (
+                    <div>Loading...</div>
+                )
+            }
         </main>
     );
 };
