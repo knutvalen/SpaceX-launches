@@ -11,8 +11,12 @@ const useStyles = makeStyles((theme) => ({
 
 const theme = createMuiTheme({
     palette: {
-        primary: blue,
-        secondary: green,
+        primary: {
+            main: blue[500],
+        },
+        secondary: {
+            main: green[500],
+        }
     },
 });
 
