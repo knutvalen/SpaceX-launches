@@ -1,5 +1,5 @@
 import { FormControlLabel, Grid, makeStyles, Switch } from "@material-ui/core";
-import { useEffect, useRef, useContext, useReducer } from "react";
+import { useEffect, useRef, useContext, useReducer, useMemo } from "react";
 import axios from "axios";
 import { GlobalContext } from "../global-state";
 import LaunchPreview from "./launch-preview";
@@ -107,6 +107,13 @@ export default function Home() {
         }
     }, [nextLaunch]);
 
+    const filteredUpcomingLaunches = useMemo(() => {
+        if (upcomingLaunches && nextLaunch) {
+            return upcomingLaunches
+                .filter(({ id }) => id !== nextLaunch.id);
+        }
+      }, [upcomingLaunches, nextLaunch]);
+
     return (
         <main className={classes.content}>
             <div className={classes.toolbar} />
@@ -125,7 +132,7 @@ export default function Home() {
                                 />
                             } label="Descending order" />
                         </Grid>
-                        {upcomingLaunches && upcomingLaunches.map((launch) => (
+                        {filteredUpcomingLaunches && filteredUpcomingLaunches.map((launch) => (
                             <Grid item key={launch.id} xs={12} sm={6} md={3} lg={2}>
                                 <LaunchPreview launch={launch} />
                             </Grid>
