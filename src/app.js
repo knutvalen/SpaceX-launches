@@ -3,6 +3,7 @@ import { blue, green } from "@material-ui/core/colors";
 import { GlobalProvider } from "./global-state";
 import Head from "./ui/head";
 import Home from "./ui/home";
+import Launch from "./ui/launch";
 
 const useStyles = makeStyles((theme) => ({
     root: { display: "flex" },
@@ -19,6 +20,9 @@ const layoutToShow = (layoutName) => {
     switch (layoutName) {
         case "home":
             return <Home />;
+
+        case "details":
+            return <Launch />;
 
         default:
             return null;
