@@ -1,8 +1,12 @@
 export default function NextLaunchPreview({ countdown, launch }) {
     return (
         <div>
-            <div>{countdown}</div>
-            <div>{launch.name}</div>
+            {countdown && (
+                <div>{countdown}</div>
+            )}
+            {launch && (
+                <div>{launch.name}</div>
+            )}
         </div>
     );
 };

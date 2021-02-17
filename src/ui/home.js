@@ -113,9 +113,7 @@ export default function Home() {
                 <div>An error occurred</div>
             ) : (
                     <div>
-                        {countdown && (
-                            <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
-                        )}
+                        <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
                         <br/>
                         {upcomingLaunches && upcomingLaunches.map((launch) => (
                             <LaunchPreview key={launch.id} launch={launch} />
