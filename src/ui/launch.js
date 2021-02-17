@@ -7,7 +7,8 @@ import {
     Typography,
     Paper,
     ListItemIcon,
-    Button
+    Button,
+    Box
 } from "@material-ui/core";
 import axios from "axios";
 import { withRouter } from "next/router";
@@ -26,27 +27,54 @@ function Launch({ router }) {
     const classes = useStyles();
     const { setPageName } = useContext(GlobalContext);
     const [launch, setLaunch] = useState();
+    const [hasErrored, setHasErrored] = useState(false);
     const isLoading = !launch;
 
-    useEffect(() => {
-        const refresh = async function () {
-            try {
-                const launch = await axios.get(`https://api.spacexdata.com/v4/launches/${router.query.id}`);
-                console.log(launch.data);
-                setLaunch(launch.data);
-            } catch (error) {
-                console.log(error);
-            }
-        };
+    function refresh() {
+        new Promise(resolve => {
+            const result = axios.get(`https://api.spacexdata.com/v4/launches/${router.query.id}`);
+            resolve(result);
+        }).then(launch => {
+            console.log(launch.data);
+            setLaunch(launch.data);
+        }).catch(error => {
+            console.log(error);
+            setHasErrored(true);
+        });
+    };
 
+    useEffect(() => {
         setPageName("Launch details");
         refresh();
     }, []);
 
+    useEffect(() => {
+        if (launch) {
+            setHasErrored(false);
+        }
+    }, [launch]);
+
     return (
         <main className={classes.content}>
             <div className={classes.toolbar} />
-            {isLoading ? (
+            {hasErrored ? (
+                <Grid container justify="center" spacing={2}>
+                    <Grid item xs={12}>
+                        <Box display="flex" justifyContent="center">
+                            <Typography variant="overline" align="center">
+                                An error occured
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Box display="flex" justifyContent="center">
+                            <Button color="secondary" onClick={() => refresh()}>
+                                Reload page
+                            </Button>
+                        </Box>
+                    </Grid>
+                </Grid>
+            ) : isLoading ? (
                 <div>Loading...</div>
             ) :
                 <Grid container justify="center" spacing={2}>

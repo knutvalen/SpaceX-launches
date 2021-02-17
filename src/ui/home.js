@@ -1,4 +1,12 @@
-import { FormControlLabel, Grid, makeStyles, Switch, Typography } from "@material-ui/core";
+import {
+    FormControlLabel,
+    Grid,
+    makeStyles,
+    Switch,
+    Typography,
+    Box,
+    Button
+} from "@material-ui/core";
 import { useEffect, useRef, useContext, useReducer, useMemo } from "react";
 import axios from "axios";
 import { GlobalContext } from "../global-state";
@@ -41,7 +49,7 @@ export default function Home() {
     let countdownTimerID;
     const isLoading = !upcomingLaunches || !countdown || !nextLaunch;
 
-    function refreshNextLaunch() {
+    function refresh() {
         new Promise(resolve => {
             const result = axios.get("https://api.spacexdata.com/v4/launches/next");
             resolve(result);
@@ -51,23 +59,21 @@ export default function Home() {
         }).catch(error => {
             dispatch({ type: "onError", error: error });
         });
+
+        new Promise(resolve => {
+            const result = axios.get("https://api.spacexdata.com/v4/launches/upcoming");
+            resolve(result);
+        }).then(upcomingLaunches => {
+            console.log(upcomingLaunches.data);
+            dispatch({ type: "setUpcomingLaunches", data: upcomingLaunches.data });
+        }).catch(error => {
+            dispatch({ type: "onError", error: error });
+        });
     };
 
     useEffect(() => {
         setPageName("SpaceX launches");
-        refreshNextLaunch();
-
-        const refreshUpcomingLaunches = async function () {
-            try {
-                const upcomingLaunches = await axios.get("https://api.spacexdata.com/v4/launches/upcoming");
-                console.log(upcomingLaunches.data);
-                dispatch({ type: "setUpcomingLaunches", data: upcomingLaunches.data });
-            } catch (error) {
-                dispatch({ type: "onError", error: error });
-            }
-        };
-
-        refreshUpcomingLaunches();
+        refresh();
     }, []);
 
     useEffect(() => {
@@ -90,7 +96,7 @@ export default function Home() {
 
         if (count < 0) {
             clearInterval(countdownTimerID);
-            refreshNextLaunch();
+            refresh();
         }
     }, [count]);
 
@@ -105,6 +111,12 @@ export default function Home() {
             dispatch({ type: "setCount", data: null });
         }
     }, [nextLaunch]);
+
+    useEffect(() => {
+        if (upcomingLaunches && nextLaunch) {
+            dispatch({ type: "onErrorHandled" });
+        }
+    }, [upcomingLaunches, nextLaunch]);
 
     const filteredUpcomingLaunches = useMemo(() => {
         if (upcomingLaunches && nextLaunch) {
@@ -126,7 +138,22 @@ export default function Home() {
         <main className={classes.content}>
             <div className={classes.toolbar} />
             {hasErrored ? (
-                <div>An error occurred</div>
+                <Grid container justify="center" spacing={2}>
+                    <Grid item xs={12}>
+                        <Box display="flex" justifyContent="center">
+                            <Typography variant="overline" align="center">
+                                An error occured
+                            </Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Box display="flex" justifyContent="center">
+                            <Button color="secondary" onClick={() => refresh()}>
+                                Reload page
+                            </Button>
+                        </Box>
+                    </Grid>
+                </Grid>
             ) : isLoading ? (
                 <div>Loading...</div>
             ) :
