@@ -16,14 +16,9 @@ function Launch({ router }) {
     const classes = useStyles();
     const { setPageName } = useContext(GlobalContext);
     const [launch, setLaunch] = useState();
+    const isLoading = !launch;
 
     useEffect(() => {
-        setPageName("Launch details");
-
-        console.log("---> router.query");
-        console.log(router.query);
-        console.log("<--- router.query");
-
         const refresh = async function () {
             try {
                 const launch = await axios.get(`https://api.spacexdata.com/v4/launches/${router.query.id}`);
@@ -34,16 +29,17 @@ function Launch({ router }) {
             }
         };
 
+        setPageName("Launch details");
         refresh();
     }, []);
 
     return (
         <main className={classes.content}>
             <div className={classes.toolbar} />
-            {launch ? (
-                <div>{launch.name}</div>
+            {isLoading ? (
+                <div>Loading...</div>
             ) : (
-                    <div>Loading...</div>
+                    <div>{launch.name}</div>
                 )
             }
         </main>

@@ -1,4 +1,4 @@
-import { FormControlLabel, Grid, makeStyles, Switch } from "@material-ui/core";
+import { FormControlLabel, Grid, makeStyles, Switch, Typography } from "@material-ui/core";
 import { useEffect, useRef, useContext, useReducer, useMemo } from "react";
 import axios from "axios";
 import { GlobalContext } from "../global-state";
@@ -23,11 +23,6 @@ const formatCountdown = (count) => {
 };
 
 export default function Home() {
-    const { setPageName } = useContext(GlobalContext);
-    const classes = useStyles();
-    const callbackRef = useRef();
-    let countdownTimerID;
-
     const [
         { delay, count, countdown, nextLaunch, upcomingLaunches, descending, hasErrored, error },
         dispatch
@@ -41,6 +36,11 @@ export default function Home() {
         hasErrored: false,
         error: null,
     });
+    const { setPageName } = useContext(GlobalContext);
+    const classes = useStyles();
+    const callbackRef = useRef();
+    let countdownTimerID;
+    const isLoading = !upcomingLaunches || !countdown || !nextLaunch;
 
     function refreshNextLaunch() {
         new Promise(resolve => {
@@ -128,29 +128,39 @@ export default function Home() {
             <div className={classes.toolbar} />
             {hasErrored ? (
                 <div>An error occurred</div>
+            ) : isLoading ? (
+                <div>Loading...</div>
             ) : (
-                    <Grid container justify="flex-start" spacing={2}>
-                        <Grid item xs={12}>
-                            <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <FormControlLabel
-                                label="Descending order"
-                                control={
-                                    <Switch
-                                        checked={descending}
-                                        onChange={() => dispatch({ type: "toggleDescending" })}
-                                    />
-                                }
-                            />
-                        </Grid>
-                        {filteredUpcomingLaunches && filteredUpcomingLaunches.map((launch) => (
-                            <Grid item key={launch.id} xs={12} sm={6} md={3} lg={2}>
-                                <LaunchPreview launch={launch} />
+                        <Grid container justify="flex-start" spacing={2}>
+                            <Grid item xs={12}>
+                                <Typography variant="overline">
+                                    Next launch
+                            </Typography>
+                                <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
                             </Grid>
-                        ))}
-                    </Grid>
-                )
+                            <Grid item xs={12}>
+                                <Typography variant="overline">
+                                    Upcoming launches
+                            </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <FormControlLabel
+                                    label="Descending"
+                                    control={
+                                        <Switch
+                                            checked={descending}
+                                            onChange={() => dispatch({ type: "toggleDescending" })}
+                                        />
+                                    }
+                                />
+                            </Grid>
+                            {filteredUpcomingLaunches && filteredUpcomingLaunches.map((launch) => (
+                                <Grid item key={launch.id} xs={12} sm={6} md={3} lg={2}>
+                                    <LaunchPreview launch={launch} />
+                                </Grid>
+                            ))}
+                        </Grid>
+                    )
             }
         </main>
     );
