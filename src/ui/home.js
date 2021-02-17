@@ -110,9 +110,18 @@ export default function Home() {
     const filteredUpcomingLaunches = useMemo(() => {
         if (upcomingLaunches && nextLaunch) {
             return upcomingLaunches
-                .filter(({ id }) => id !== nextLaunch.id);
+                .filter(({ id }) => id !== nextLaunch.id)
+                .sort((x, y) => {
+                    if (x.date_unix < y.date_unix) {
+                        return descending ? -1 : 1;
+                    }
+                    if (x.date_unix > y.date_unix) {
+                        return descending ? 1 : -1;
+                    }
+                    return 0;
+                });
         }
-      }, [upcomingLaunches, nextLaunch]);
+    }, [upcomingLaunches, nextLaunch, descending]);
 
     return (
         <main className={classes.content}>
@@ -125,12 +134,15 @@ export default function Home() {
                             <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControlLabel control={
-                                <Switch
-                                    checked={descending}
-                                    onChange={() => dispatch({ type: "toggleDescending" })}
-                                />
-                            } label="Descending order" />
+                            <FormControlLabel
+                                label="Descending order"
+                                control={
+                                    <Switch
+                                        checked={descending}
+                                        onChange={() => dispatch({ type: "toggleDescending" })}
+                                    />
+                                }
+                            />
                         </Grid>
                         {filteredUpcomingLaunches && filteredUpcomingLaunches.map((launch) => (
                             <Grid item key={launch.id} xs={12} sm={6} md={3} lg={2}>
