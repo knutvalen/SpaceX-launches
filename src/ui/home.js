@@ -9,7 +9,6 @@ import NextLaunchPreview from "./next-launch-preview";
 const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
     content: {
-        flexGrow: 1,
         padding: theme.spacing(3),
     },
 }));

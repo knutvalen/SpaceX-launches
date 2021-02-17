@@ -6,7 +6,9 @@ import Home from "./ui/home";
 import Launch from "./ui/launch";
 
 const useStyles = makeStyles((theme) => ({
-    root: { display: "flex" },
+    root: {
+        flexGrow: 1,
+    },
 }));
 
 const theme = createMuiTheme({
