@@ -54,7 +54,7 @@ export default function Home() {
     };
 
     useEffect(() => {
-        setPageName("Dashboard");
+        setPageName("SpaceX launches");
         refreshNextLaunch();
 
         const refreshUpcomingLaunches = async function () {
