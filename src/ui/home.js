@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core";
+import { Grid, makeStyles } from "@material-ui/core";
 import { useEffect, useRef, useContext, useReducer } from "react";
 import axios from "axios";
 import { GlobalContext } from "../global-state";
@@ -112,13 +112,17 @@ export default function Home() {
             {hasErrored ? (
                 <div>An error occurred</div>
             ) : (
-                    <div>
-                        <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
-                        <br/>
+                    <Grid container justify="flex-start" spacing={2}>
+                        <Grid item xs={12}>
+                            <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
+                        </Grid>
+                        <br />
                         {upcomingLaunches && upcomingLaunches.map((launch) => (
-                            <LaunchPreview key={launch.id} launch={launch} />
+                            <Grid item key={launch.id} xs={12} sm={6} md={3} lg={2}>
+                                <LaunchPreview launch={launch} />
+                            </Grid>
                         ))}
-                    </div>
+                    </Grid>
                 )
             }
         </main>
