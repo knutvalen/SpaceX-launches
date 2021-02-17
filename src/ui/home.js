@@ -1,4 +1,4 @@
-import { Grid, makeStyles } from "@material-ui/core";
+import { FormControlLabel, Grid, makeStyles, Switch } from "@material-ui/core";
 import { useEffect, useRef, useContext, useReducer } from "react";
 import axios from "axios";
 import { GlobalContext } from "../global-state";
@@ -29,7 +29,7 @@ export default function Home() {
     let countdownTimerID;
 
     const [
-        { delay, count, countdown, nextLaunch, upcomingLaunches, hasErrored, error },
+        { delay, count, countdown, nextLaunch, upcomingLaunches, descending, hasErrored, error },
         dispatch
     ] = useReducer(HomeReducer, {
         delay: null,
@@ -37,6 +37,7 @@ export default function Home() {
         countdown: null,
         nextLaunch: null,
         upcomingLaunches: [],
+        descending: true,
         hasErrored: false,
         error: null,
     });
@@ -116,7 +117,14 @@ export default function Home() {
                         <Grid item xs={12}>
                             <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
                         </Grid>
-                        <br />
+                        <Grid item xs={12}>
+                            <FormControlLabel control={
+                                <Switch
+                                    checked={descending}
+                                    onChange={() => dispatch({ type: "toggleDescending" })}
+                                />
+                            } label="Descending order" />
+                        </Grid>
                         {upcomingLaunches && upcomingLaunches.map((launch) => (
                             <Grid item key={launch.id} xs={12} sm={6} md={3} lg={2}>
                                 <LaunchPreview launch={launch} />

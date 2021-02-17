@@ -30,6 +30,12 @@ export default function HomeReducer(state, action) {
                 upcomingLaunches: action.data,
             };
 
+            case "toggleDescending":
+                return {
+                    ...state,
+                    descending: !state.descending,
+                };
+
         case "onError":
             return {
                 ...state,
