@@ -129,37 +129,36 @@ export default function Home() {
                 <div>An error occurred</div>
             ) : isLoading ? (
                 <div>Loading...</div>
-            ) : (
-                        <Grid container justify="flex-start" spacing={2}>
-                            <Grid item xs={12}>
-                                <Typography variant="overline">
-                                    Next launch
-                            </Typography>
-                                <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography variant="overline">
-                                    Upcoming launches
-                            </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    label="Descending"
-                                    control={
-                                        <Switch
-                                            checked={descending}
-                                            onChange={() => dispatch({ type: "toggleDescending" })}
-                                        />
-                                    }
+            ) :
+                <Grid container justify="flex-start" spacing={2}>
+                    <Grid item xs={12}>
+                        <Typography variant="overline">
+                            Next launch
+                        </Typography>
+                        <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Typography variant="overline">
+                            More launches
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControlLabel
+                            label="Descending"
+                            control={
+                                <Switch
+                                    checked={descending}
+                                    onChange={() => dispatch({ type: "toggleDescending" })}
                                 />
-                            </Grid>
-                            {filteredUpcomingLaunches && filteredUpcomingLaunches.map((launch) => (
-                                <Grid item key={launch.id} xs={12} sm={6} md={3} lg={2}>
-                                    <LaunchPreview launch={launch} />
-                                </Grid>
-                            ))}
+                            }
+                        />
+                    </Grid>
+                    {filteredUpcomingLaunches && filteredUpcomingLaunches.map((launch) => (
+                        <Grid item key={launch.id} xs={12} sm={6} md={3} lg={2}>
+                            <LaunchPreview launch={launch} />
                         </Grid>
-                    )
+                    ))}
+                </Grid>
             }
         </main>
     );

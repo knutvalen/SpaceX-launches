@@ -49,9 +49,8 @@ export default function App({ layoutName }) {
                             <Head />
                             {layout}
                         </div>
-                    ) : (
-                            <div>Not found</div>
-                        )
+                    ) :
+                        <div>Not found</div>
                     }
                 </div>
             </MuiThemeProvider>
