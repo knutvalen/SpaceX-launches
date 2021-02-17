@@ -1,4 +1,7 @@
 import { makeStyles } from "@material-ui/core";
+import { withRouter } from "next/router";
+import { useContext, useEffect } from "react";
+import { GlobalContext } from "../global-state";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
@@ -8,13 +11,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Launch() {
+function Launch({ router }) {
     const classes = useStyles();
+    const { setPageName } = useContext(GlobalContext);
+
+    useEffect(() => {
+        setPageName("Launch details");
+
+        console.log("---> router.query");
+        console.log(router.query);
+        console.log("<--- router.query");
+    }, []);
 
     return (
-        <main>
+        <main className={classes.content}>
             <div className={classes.toolbar} />
-            <div>Launch details here</div>
         </main>
     );
 };
+
+export default withRouter(Launch);
