@@ -1,4 +1,13 @@
-import { Button, Card, CardActionArea, CardActions, CardContent, Typography } from "@material-ui/core";
+import {
+    Button,
+    Card,
+    CardActionArea,
+    CardActions,
+    CardContent,
+    List, ListItem,
+    ListItemText,
+    Typography
+} from "@material-ui/core";
 import { useRouter } from "next/router";
 
 export default function NextLaunchPreview({ countdown, launch }) {
@@ -7,10 +16,10 @@ export default function NextLaunchPreview({ countdown, launch }) {
     function onDetailsClick() {
         router.push({
             pathname: '/details',
-            query: { 
-                id: launch.id 
+            query: {
+                id: launch.id
             },
-          })
+        })
     }
 
     return (
@@ -23,16 +32,21 @@ export default function NextLaunchPreview({ countdown, launch }) {
                         </Typography>
                     )}
                     {launch && (
-                        <Typography variant="subtitle1">
-                            {launch.name}
-                        </Typography>
+                        <List>
+                            <ListItem>
+                                <ListItemText primary="Name" secondary={launch.name} />
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText primary="Launch time" secondary={launch.date_utc} />
+                            </ListItem>
+                        </List>
                     )}
                 </CardContent>
             </CardActionArea>
             <CardActions>
                 <Button color="secondary" onClick={() => onDetailsClick()}>
                     Details
-                    </Button>
+                </Button>
             </CardActions>
         </Card>
     );
