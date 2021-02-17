@@ -1,7 +1,6 @@
 import {
     Button,
     Card,
-    CardActionArea,
     CardActions,
     CardContent,
     List, ListItem,
@@ -24,25 +23,23 @@ export default function NextLaunchPreview({ countdown, launch }) {
 
     return (
         <Card>
-            <CardActionArea onClick={() => onDetailsClick()}>
-                <CardContent>
-                    {countdown && (
-                        <Typography variant="h1" align="center">
-                            {countdown}
-                        </Typography>
-                    )}
-                    {launch && (
-                        <List>
-                            <ListItem>
-                                <ListItemText primary="Name" secondary={launch.name} />
-                            </ListItem>
-                            <ListItem>
-                                <ListItemText primary="Launch time" secondary={launch.date_utc} />
-                            </ListItem>
-                        </List>
-                    )}
-                </CardContent>
-            </CardActionArea>
+            <CardContent>
+                {countdown && (
+                    <Typography variant="h1" align="center">
+                        {countdown}
+                    </Typography>
+                )}
+                {launch && (
+                    <List>
+                        <ListItem>
+                            <ListItemText primary="Name" secondary={launch.name} />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemText primary="Launch time" secondary={launch.date_utc} />
+                        </ListItem>
+                    </List>
+                )}
+            </CardContent>
             <CardActions>
                 <Button color="secondary" onClick={() => onDetailsClick()}>
                     Details
