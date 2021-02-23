@@ -1,10 +1,8 @@
 import {
   FormControlLabel,
   Grid,
-  makeStyles,
   Switch,
   Typography,
-  Box,
   Button
 } from "@material-ui/core";
 import { useEffect, useRef, useContext, useReducer, useMemo } from "react";
@@ -14,14 +12,7 @@ import LaunchPreview from "../ui/launch-preview";
 import HomeReducer from "../reducers/home-reducer";
 import NextLaunchPreview from "../ui/next-launch-preview";
 import styled from 'styled-components';
-import { color, space } from 'styled-system'
-
-const useStyles = makeStyles((theme) => ({
-  toolbar: theme.mixins.toolbar,
-  content: {
-    padding: theme.spacing(3),
-  },
-}));
+import { color, space, typography } from 'styled-system'
 
 const formatCountdown = (count) => {
   const days = Math.floor(count / (60 * 60 * 24));
@@ -46,7 +37,6 @@ export default function Home() {
     error: null,
   });
   const { setPageName } = useContext(GlobalContext);
-  const classes = useStyles();
   const callbackRef = useRef();
   let countdownTimerID;
   const isLoading = !upcomingLaunches || !countdown || !nextLaunch;
@@ -136,13 +126,20 @@ export default function Home() {
     }
   }, [upcomingLaunches, nextLaunch, descending]);
 
-  const Box = styled('div')(
+  const Box = styled.div(
     space, 
-    color
+    color,
+    typography,
+  );
+
+  const Main = styled.main(
+    space, 
+    color,
+    typography,
   );
 
   return (
-    <main className={classes.content}>
+    <Main p={4}>
       {hasErrored ? (
         <Grid container justify="center" spacing={2}>
           <Grid item xs={12}>
@@ -163,36 +160,39 @@ export default function Home() {
       ) : isLoading ? (
         <div>Loading...</div>
       ) :
-          <Grid container justify="flex-start" spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="overline">
-                Next launch
-                        </Typography>
-              <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="overline">
-                More launches
-                        </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                label="Descending"
-                control={
-                  <Switch
-                    checked={descending}
-                    onChange={() => dispatch({ type: "toggleDescending" })}
-                  />
-                }
-              />
-            </Grid>
-            {filteredUpcomingLaunches && filteredUpcomingLaunches.map((launch) => (
-              <Grid item key={launch.id} xs={12} sm={6} md={3} lg={2}>
-                <LaunchPreview launch={launch} />
+          <>
+            <Box bg="black" p={4}></Box>
+            <Grid container justify="flex-start" spacing={2}>
+              <Grid item xs={12}>
+                <Typography variant="overline">
+                  Next launch
+                          </Typography>
+                <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
               </Grid>
-            ))}
-          </Grid>
+              <Grid item xs={12}>
+                <Typography variant="overline">
+                  More launches
+                          </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  label="Descending"
+                  control={
+                    <Switch
+                      checked={descending}
+                      onChange={() => dispatch({ type: "toggleDescending" })}
+                    />
+                  }
+                />
+              </Grid>
+              {filteredUpcomingLaunches && filteredUpcomingLaunches.map((launch) => (
+                <Grid item key={launch.id} xs={12} sm={6} md={3} lg={2}>
+                  <LaunchPreview launch={launch} />
+                </Grid>
+              ))}
+            </Grid>
+          </>
       }
-    </main>
+    </Main>
   );
 };
