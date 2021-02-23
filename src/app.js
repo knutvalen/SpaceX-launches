@@ -1,19 +1,14 @@
 import { GlobalProvider } from "./global-state";
 import styled, { ThemeProvider } from "styled-components";
-import Head from "./ui/head";
 import Home from "./ui/home";
 import Launch from "./ui/launch";
+import Header from "./layouts/Header";
+import { Theme } from "./ui/Theme";
+import { CssBaseline } from "@material-ui/core";
 
-const Root = styled.div`
-  flex-grow: 1;
-`;
-
-const theme = {
-  colors: {
-    primary: "#2196f3",
-    secondary: "#4caf50",
-  },
-};
+const Root = styled.div({
+  flexGrow: 1,
+});
 
 const layoutToShow = (layoutName) => {
   switch (layoutName) {
@@ -33,11 +28,12 @@ export default function App({ layoutName }) {
 
   return (
     <GlobalProvider>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={Theme}>
         <Root>
+          <CssBaseline />
           {layout ? (
             <div>
-              <Head />
+              <Header />
               {layout}
             </div>
           ) :

@@ -136,7 +136,6 @@ export default function Home() {
 
     return (
         <main className={classes.content}>
-            <div className={classes.toolbar} />
             {hasErrored ? (
                 <Grid container justify="center" spacing={2}>
                     <Grid item xs={12}>
