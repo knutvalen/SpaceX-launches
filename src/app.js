@@ -1,6 +1,6 @@
 import { GlobalProvider } from "./global-state";
 import styled, { ThemeProvider } from "styled-components";
-import Home from "./ui/home";
+import Home from "./layouts/Home";
 import Launch from "./ui/launch";
 import Header from "./layouts/Header";
 import { Theme } from "./ui/Theme";

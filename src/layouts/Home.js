@@ -10,9 +10,9 @@ import {
 import { useEffect, useRef, useContext, useReducer, useMemo } from "react";
 import axios from "axios";
 import { GlobalContext } from "../global-state";
-import LaunchPreview from "./launch-preview";
+import LaunchPreview from "../ui/launch-preview";
 import HomeReducer from "../reducers/home-reducer";
-import NextLaunchPreview from "./next-launch-preview";
+import NextLaunchPreview from "../ui/next-launch-preview";
 
 const useStyles = makeStyles((theme) => ({
     toolbar: theme.mixins.toolbar,
