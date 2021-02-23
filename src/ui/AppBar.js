@@ -6,7 +6,7 @@ export const AppBar = styled('div')(
     backgroundColor: props.theme.primaryColor,
     color: props.theme.primaryTextColor,
     fontSize: 18,
-    boxShadow: '0px 4px 4px #88888888',
+    boxShadow: `0px 4px 4px ${props.theme.shadowColor}`,
   }),
   space,
 );

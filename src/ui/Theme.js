@@ -7,4 +7,5 @@ export const Theme = {
   secondaryDarkColor: "#087f23",
   primaryTextColor: "#000000",
   secondaryTextColor: "#000000",
+  shadowColor: "#88888888",
 };
