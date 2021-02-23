@@ -7,7 +7,7 @@ export default function Header() {
 
   return (
     <header>
-      <AppBar padding={3}>
+      <AppBar>
         {pageName}
       </AppBar>
     </header>
