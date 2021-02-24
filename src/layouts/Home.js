@@ -11,8 +11,9 @@ import { GlobalContext } from "../global-state";
 import LaunchPreview from "../ui/launch-preview";
 import HomeReducer from "../reducers/home-reducer";
 import NextLaunchPreview from "../ui/next-launch-preview";
-import styled from 'styled-components';
-import { color, space, typography } from 'styled-system'
+import { Main } from "../ui/Main";
+import { Box } from "../ui/Box";
+import { Text } from "../ui/Text";
 
 const formatCountdown = (count) => {
   const days = Math.floor(count / (60 * 60 * 24));
@@ -126,20 +127,8 @@ export default function Home() {
     }
   }, [upcomingLaunches, nextLaunch, descending]);
 
-  const Box = styled.div(
-    space, 
-    color,
-    typography,
-  );
-
-  const Main = styled.main(
-    space, 
-    color,
-    typography,
-  );
-
   return (
-    <Main p={4}>
+    <Main padding={4}>
       {hasErrored ? (
         <Grid container justify="center" spacing={2}>
           <Grid item xs={12}>
@@ -160,13 +149,12 @@ export default function Home() {
       ) : isLoading ? (
         <div>Loading...</div>
       ) :
-          <>
-            <Box bg="black" p={4}></Box>
+          <Box>
+            <Box>
+              <Text fontSize={0}>NEXT LAUNCH</Text>
+            </Box>
             <Grid container justify="flex-start" spacing={2}>
               <Grid item xs={12}>
-                <Typography variant="overline">
-                  Next launch
-                          </Typography>
                 <NextLaunchPreview countdown={countdown} launch={nextLaunch} />
               </Grid>
               <Grid item xs={12}>
@@ -191,7 +179,7 @@ export default function Home() {
                 </Grid>
               ))}
             </Grid>
-          </>
+          </Box>
       }
     </Main>
   );
