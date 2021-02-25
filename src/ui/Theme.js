@@ -11,5 +11,5 @@ export const Theme = {
     shadowColor: "#88888888",
   },
   space: [0, 2, 4, 8, 16, 32],
-  fontSizes: [14, 16, 18, 24, 32],
+  fontSizes: [14, 16, 18, 24, 32, 48, 64, 90],
 };
