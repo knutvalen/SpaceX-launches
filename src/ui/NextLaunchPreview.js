@@ -3,9 +3,9 @@ import Box from "./Box";
 import Card from "./Card";
 import Text from './Text';
 import Grid from './Grid';
-import Button from './Button';
 import { useContext } from "react";
 import { ThemeContext } from "styled-components";
+import SecondaryButton from "./SecondaryButton";
 
 export default function NextLaunchPreview({ countdown, launch }) {
   const router = useRouter();
@@ -39,14 +39,9 @@ export default function NextLaunchPreview({ countdown, launch }) {
           </Box>
         </Grid>
       )}
-      <Button
-        color={themeContext.colors.secondaryColor}
-        backgroundColor="transparent"
-        onClick={() => onDetailsClick()}
-        fontSize={1}
-      >
+      <SecondaryButton onClick={() => onDetailsClick()}>
         DETAILS
-      </Button>
+      </SecondaryButton>
     </Card>
   );
 };
