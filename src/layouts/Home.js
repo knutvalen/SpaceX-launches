@@ -8,9 +8,9 @@ import {
 import { useEffect, useRef, useContext, useReducer, useMemo } from "react";
 import axios from "axios";
 import { GlobalContext } from "../global-state";
-import LaunchPreview from "../ui/launch-preview";
-import HomeReducer from "../reducers/home-reducer";
-import NextLaunchPreview from "../ui/NextLaunchPreview";
+import LaunchPreview from "./LaunchPreview";
+import HomeReducer from "../reducers/HomeReducer";
+import NextLaunchPreview from "./NextLaunchPreview";
 import { Main } from "../ui/Main";
 import Box from "../ui/Box";
 import Text from "../ui/Text";

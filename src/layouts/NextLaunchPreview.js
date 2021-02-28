@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
-import Box from "./Box";
-import Card from "./Card";
-import Text from './Text';
-import Grid from './Grid';
+import Box from "../ui/Box";
+import Card from "../ui/Card";
+import Text from '../ui/Text';
+import Grid from '../ui/Grid';
 import { useContext } from "react";
 import { ThemeContext } from "styled-components";
-import SecondaryButton from "./SecondaryButton";
+import SecondaryButton from "../ui/SecondaryButton";
 
 export default function NextLaunchPreview({ countdown, launch }) {
   const router = useRouter();

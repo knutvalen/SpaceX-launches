@@ -11,6 +11,9 @@ const Button = styled.button(
     '&:hover': {
       boxShadow: `0px 3px 4px ${props.theme.colors.shadowColor}`,
     },
+    '&:active': {
+      boxShadow: `0px 5px 6px ${props.theme.colors.shadowColor}`,
+    },
   }),
 );
 
