@@ -1,10 +1,10 @@
 import {
   FormControlLabel,
-  Grid,
   Switch,
   Typography,
   Button
 } from "@material-ui/core";
+import Grid from '../ui/Grid';
 import { useEffect, useRef, useContext, useReducer, useMemo } from "react";
 import axios from "axios";
 import { GlobalContext } from "../global-state";
@@ -130,22 +130,22 @@ export default function Home() {
   return (
     <Main padding={4}>
       {hasErrored ? (
-        <Grid container justify="center" spacing={2}>
-          <Grid item xs={12}>
+        <>
+          <Grid>
             <Box display="flex" justifyContent="center">
               <Typography variant="overline" align="center">
                 An error occured
-                            </Typography>
+              </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12}>
+          <Grid>
             <Box display="flex" justifyContent="center">
               <Button color="secondary" onClick={() => refresh()}>
                 Reload page
-                            </Button>
+              </Button>
             </Box>
           </Grid>
-        </Grid>
+        </>
       ) : isLoading ? (
         <div>Loading...</div>
       ) :
