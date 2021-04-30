@@ -1,12 +1,11 @@
 import PrimaryButton from '../ui/PrimaryButton';
 
 export default {
-  title: 'PrimaryButton',
+  title: 'ui/PrimaryButton',
   component: PrimaryButton
 };
 
-const Template = (args) => <PrimaryButton {...args} ></PrimaryButton>;
+const Template = (args) => <PrimaryButton {...args} />;
 
-export const FirstStory = Template.bind({});
-
-FirstStory.args = {};
+export const Story = Template.bind({});
+Story.args = {};
