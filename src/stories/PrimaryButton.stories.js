@@ -5,7 +5,9 @@ export default {
   component: PrimaryButton
 };
 
-const Template = (args) => <PrimaryButton {...args} />;
+const Template = (args) => <PrimaryButton {...args}>{args.text}</PrimaryButton>;
 
 export const Story = Template.bind({});
-Story.args = {};
+Story.args = {
+  text: 'Button',
+};

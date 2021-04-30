@@ -5,7 +5,9 @@ export default {
   component: SecondaryButton
 };
 
-const Template = (args) => <SecondaryButton {...args} />;
+const Template = (args) => <SecondaryButton {...args}>{args.text}</SecondaryButton>;
 
 export const Story = Template.bind({});
-Story.args = {};
+Story.args = {
+  text: 'Button',
+};
